@@ -1,0 +1,168 @@
+/* ===== Global ===== */
+body {
+    font-family: "Segoe UI", sans-serif;
+    background-color: #f4f6f9;
+}
+
+/* Smooth feel */
+* {
+    transition: all 0.2s ease;
+}
+
+/* ===== Navbar ===== */
+.navbar {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+/* ===== Cards ===== */
+.card {
+    border: none;
+    border-radius: 14px;
+}
+
+/* Feed post card */
+.post-card {
+    max-width: 600px;
+    margin: auto;
+}
+
+/* Post content text */
+.post-content {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #333;
+}
+
+/* Post image */
+.post-image {
+    border-radius: 10px;
+    max-height: 400px;
+    object-fit: cover;
+}
+
+/* ===== Post actions container ===== */
+.post-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+    width: fit-content;
+    /* force small width */
+}
+
+/* ===== Like ===== */
+.like-btn {
+    font-size: 14px;
+    cursor: pointer;
+    user-select: none;
+    padding: 2px 4px;
+    border-radius: 6px;
+    transition: 0.15s ease;
+}
+
+.like-btn:hover {
+    background: rgba(255, 0, 0, 0.08);
+    transform: scale(1.05);
+}
+
+/* ===== Delete ===== */
+.delete-btn {
+    font-size: 13px;
+    color: #dc3545;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 6px;
+    transition: 0.15s ease;
+}
+
+.delete-btn:hover {
+    background: rgba(220, 53, 69, 0.1);
+}
+
+
+
+/* ===== Comment box ===== */
+.comment-input {
+    border-radius: 20px;
+    font-size: 13px;
+}
+
+/* Comment text */
+.comment-text {
+    font-size: 13px;
+    color: #444;
+}
+
+/* ===== Create post box ===== */
+#createPost textarea {
+    border-radius: 12px;
+    resize: none;
+}
+
+/* ===== Small subtle shadow ===== */
+.shadow-sm {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* ===== Create Post Card ===== */
+#createPost {
+    max-width: 600px;
+    margin: auto;
+    border-radius: 16px;
+}
+
+/* Textarea styling */
+#createPost textarea {
+    border-radius: 12px;
+    padding: 12px;
+    font-size: 14px;
+    border: 1px solid #e0e0e0;
+}
+
+#createPost textarea:focus {
+    box-shadow: none;
+    border-color: #0d6efd;
+}
+
+/* Image URL input */
+#createPost input {
+    border-radius: 12px;
+    font-size: 14px;
+}
+
+/* Post button */
+#createPost button {
+    border-radius: 25px;
+    padding: 6px 18px;
+    font-size: 14px;
+}
+
+/* Subtle hover */
+#createPost button:hover {
+    transform: scale(1.05);
+}
+
+.post-dp {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* ===== Post Header ===== */
+.post-header {
+    position: relative;
+}
+
+/* ===== Post actions row ===== */
+.post-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.post-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}

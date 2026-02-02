@@ -1,0 +1,28 @@
+body {
+    font-family: "Segoe UI", sans-serif;
+}
+
+.shadow {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
+}
+
+.nav-pills .nav-link.active {
+    background-color: #0d6efd;
+}
+
+/* ===== Auth Footer ===== */
+.auth-footer {
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+/* Links styling */
+.footer-link {
+    color: #0d6efd;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.footer-link:hover {
+    text-decoration: underline;
+}
