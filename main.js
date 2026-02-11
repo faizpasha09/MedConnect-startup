@@ -1,16 +1,17 @@
-// ================= SIGNUP =================
-const API_BASE = window.location.origin + "/api";
+const API_BASE = "http://localhost:5000/api";
 
+
+// ================= SIGNUP =================
 const signupForm = document.getElementById("signupForm");
 
 if (signupForm) {
     signupForm.addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        const name = signupForm.querySelector('input[name="name"]').value;
-        const email = signupForm.querySelector('input[name="email"]').value;
-        const specialization = signupForm.querySelector('input[name="specialization"]').value;
-        const password = signupForm.querySelector('input[name="password"]').value;
+        const name = signupForm.querySelector('input[type="text"]').value;
+        const email = signupForm.querySelector('input[type="email"]').value;
+        const specialization = signupForm.querySelectorAll('input[type="text"]')[1].value;
+        const password = signupForm.querySelector('input[type="password"]').value;
 
         try {
             const res = await fetch(`${API_BASE}/signup`, {
@@ -20,25 +21,31 @@ if (signupForm) {
             });
 
             const data = await res.json();
-            alert(data.message || "Signup successful");
+
+            alert(data.message);
+
+            if (res.ok) {
+                signupForm.reset();
+            }
         } catch (err) {
-            console.error("Signup error:", err);
-            alert("Something went wrong");
+            alert("Signup failed ❌");
         }
     });
 }
 
 
-
 // ================= LOGIN =================
 const loginForm = document.getElementById("loginForm");
+const loginError = document.getElementById("loginError");
 
 if (loginForm) {
     loginForm.addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        const email = loginForm.querySelector('input[name="email"]').value;
-        const password = loginForm.querySelector('input[name="password"]').value;
+        loginError.classList.add("d-none"); // hide old error
+
+        const email = loginForm.querySelector('input[type="email"]').value;
+        const password = loginForm.querySelector('input[type="password"]').value;
 
         try {
             const res = await fetch(`${API_BASE}/login`, {
@@ -49,20 +56,29 @@ if (loginForm) {
 
             const data = await res.json();
 
-            if (res.ok) {
-                // ✅ TOKEN save (important)
-                localStorage.setItem("token", data.token);
+            // ❌ If login failed → show red message
+            if (!res.ok) {
 
-                // ✅ REDIRECT to dashboard
-                window.location.href = "/dashboard.html";
-            } else {
-                alert(data.message || "Login failed");
+                // 🔐 If verification pending → redirect page
+                if (res.status === 403) {
+                    window.location.href = "pending.html";
+                    return;
+                }
+
+                loginError.textContent = data.message || "Login failed";
+                loginError.classList.remove("d-none");
+                return;
             }
+
+
+            // ✅ Success
+            localStorage.setItem("token", data.token);
+            window.location.href = "dashboard.html";
+
         } catch (err) {
-            console.error("Login error:", err);
-            alert("Something went wrong");
+            loginError.textContent = "Server error. Try again later.";
+            loginError.classList.remove("d-none");
         }
     });
 }
-
 
