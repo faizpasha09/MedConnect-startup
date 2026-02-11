@@ -190,5 +190,5 @@ async function deletePost(postId) {
 // ================= LOGOUT =================
 document.getElementById("logoutBtn").addEventListener("click", () => {
     localStorage.removeItem("token");
-    window.location.href = "login.html";
+    window.location.href = "index.html";
 });

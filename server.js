@@ -21,6 +21,14 @@ const app = express();
     },
 }); */
 
+// ROOT folder ki saari static files serve karega
+app.use(express.static(__dirname));
+
+// Optional: direct login page open karne ke liye
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "index.html"));
+});
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => cb(null, "uploads/"),
     filename: (req, file, cb) =>
@@ -37,7 +45,6 @@ app.use(bodyParser.json());
 app.use("/uploads", express.static("uploads"));
 
 const SECRET_KEY = "medconnect_secret";
-
 
 // ================= SIGNUP =================
 app.post("/api/signup", async (req, res) => {
@@ -83,11 +90,11 @@ app.post("/api/login", (req, res) => {
         }
 
         // 🔐 Check doctor verification status
-       /* if (doctor.status !== "verified") {
-            return res.status(403).json({
-                message: "Your account is under verification. Please wait for approval.",
-            });
-        } */
+        /* if (doctor.status !== "verified") {
+             return res.status(403).json({
+                 message: "Your account is under verification. Please wait for approval.",
+             });
+         } */
 
         const token = jwt.sign({ id: doctor.id }, SECRET_KEY, { expiresIn: "7d" });
 
