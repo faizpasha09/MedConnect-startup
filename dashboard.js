@@ -81,7 +81,7 @@ async function loadPosts() {
 
     <img 
       src="${post.profile_image
-                    ? `http://localhost:5000$${window.location.origin}${post.profile_image}`
+                    ? `${window.location.origin}${post.profile_image}`
                     : 'https://via.placeholder.com/40'}"
       class="post-dp me-2"
     />
@@ -192,4 +192,5 @@ document.getElementById("logoutBtn").addEventListener("click", () => {
     localStorage.removeItem("token");
     window.location.href = "index.html";
 });
+
 
