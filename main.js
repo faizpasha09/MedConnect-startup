@@ -64,5 +64,6 @@ if (loginForm) {
         }
     });
 }
+e.preventDefault();
 
 
