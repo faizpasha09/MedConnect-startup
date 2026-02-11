@@ -1,5 +1,7 @@
-const API_BASE = "https://medconnect.cloud/api";
-
+// ✅ Fix: Global scope check taaki 'already declared' error na aaye
+if (typeof window.API_BASE === 'undefined') {
+    window.API_BASE = "https://medconnect.cloud/api";
+}
 
 // ================= SIGNUP =================
 const signupForm = document.getElementById("signupForm");
@@ -14,21 +16,22 @@ if (signupForm) {
         const password = signupForm.querySelector('input[type="password"]').value;
 
         try {
-            const res = await fetch(`${API_BASE}/signup`, {
+            // ✅ Fix: window.API_BASE use kiya hai
+            const res = await fetch(`${window.API_BASE}/signup`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ name, email, specialization, password }),
             });
 
             const data = await res.json();
-
             alert(data.message);
 
             if (res.ok) {
                 signupForm.reset();
             }
         } catch (err) {
-            alert("Signup failed ❌");
+            console.error("Signup Error:", err);
+            alert("Signup failed ❌ Check console for details.");
         }
     });
 }
@@ -42,13 +45,14 @@ if (loginForm) {
     loginForm.addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        loginError.classList.add("d-none"); // hide old error
+        if (loginError) loginError.classList.add("d-none");
 
         const email = loginForm.querySelector('input[type="email"]').value;
         const password = loginForm.querySelector('input[type="password"]').value;
 
         try {
-            const res = await fetch(`${API_BASE}/login`, {
+            // ✅ Fix: window.API_BASE use kiya hai
+            const res = await fetch(`${window.API_BASE}/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password }),
@@ -56,30 +60,29 @@ if (loginForm) {
 
             const data = await res.json();
 
-            // ❌ If login failed → show red message
             if (!res.ok) {
-
-                // 🔐 If verification pending → redirect page
                 if (res.status === 403) {
                     window.location.href = "pending.html";
                     return;
                 }
 
-                loginError.textContent = data.message || "Login failed";
-                loginError.classList.remove("d-none");
+                if (loginError) {
+                    loginError.textContent = data.message || "Login failed";
+                    loginError.classList.remove("d-none");
+                }
                 return;
             }
-
 
             // ✅ Success
             localStorage.setItem("token", data.token);
             window.location.href = "dashboard.html";
 
         } catch (err) {
-            loginError.textContent = "Server error. Try again later.";
-            loginError.classList.remove("d-none");
+            console.error("Login Error:", err);
+            if (loginError) {
+                loginError.textContent = "Server error. Check if backend is running!";
+                loginError.classList.remove("d-none");
+            }
         }
     });
 }
-
-
