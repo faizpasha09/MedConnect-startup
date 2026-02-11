@@ -1,7 +1,3 @@
-const nameInput = document.getElementById("name");
-const professionInput = document.getElementById("profession");
-const aboutInput = document.getElementById("about");
-
 document.addEventListener("DOMContentLoaded", () => {
 
     const API = window.location.origin + "/api";
@@ -16,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const preview = document.getElementById("preview");
     const imageInput = document.getElementById("image");
 
-    // ===== LOAD PROFILE =====
+    // LOAD PROFILE
     async function loadProfile() {
         const res = await fetch(`${API}/profile`, {
             headers: { Authorization: `Bearer ${token}` },
@@ -35,14 +31,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     loadProfile();
 
-    // ===== IMAGE PREVIEW =====
+    // IMAGE PREVIEW
     imageInput.onchange = () => {
         if (imageInput.files[0] && preview) {
             preview.src = URL.createObjectURL(imageInput.files[0]);
         }
     };
 
-    // ===== UPDATE PROFILE =====
+    // UPDATE PROFILE
     form.onsubmit = async (e) => {
         e.preventDefault();
 
@@ -68,5 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
 });
+
+
 
 
