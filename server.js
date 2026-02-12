@@ -190,6 +190,7 @@ app.get("/api/profile", (req, res) => {
 
 // ===== UPDATE PROFILE =====
 app.put("/api/profile", upload.single("profile_image"), (req, res) => {
+  try {
     const token = req.headers.authorization?.split(" ")[1];
     if (!token) return res.status(401).json({ message: "No token" });
 
@@ -202,19 +203,23 @@ app.put("/api/profile", upload.single("profile_image"), (req, res) => {
     const params = [name, about, profession];
 
     if (imagePath) {
-        sql += ", profile_image=?";
-        params.push(imagePath);
+      sql += ", profile_image=?";
+      params.push(imagePath);
     }
 
     sql += " WHERE id=?";
     params.push(decoded.id);
 
     db.query(sql, params, (err) => {
-        if (err) return res.status(500).json({ message: "Update failed" });
+      if (err) return res.status(500).json({ message: "Update failed" });
 
-        res.json({ message: "Profile updated successfully ✅" });
+      res.json({ message: "Profile updated successfully ✅" });
     });
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
 });
+
 
 
 
@@ -378,4 +383,5 @@ app.post("/api/posts/:id/comment", (req, res) => {
 app.listen(5000, () => {
     console.log("Server running on http://localhost:5000 🚀");
 });
+
 
