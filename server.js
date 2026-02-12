@@ -42,22 +42,6 @@ app.use(express.static(__dirname));
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "index.html"));
 });
-
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => cb(null, "uploads/"),
-    filename: (req, file, cb) =>
-        cb(null, Date.now() + path.extname(file.originalname)),
-});
-
-//const upload = multer({ storage });
-
-
-const upload = multer({ storage });
-
-app.use(cors());
-app.use(bodyParser.json());
-app.use("/uploads", express.static("uploads"));
-
 const SECRET_KEY = "medconnect_secret";
 
 // ================= SIGNUP =================
@@ -383,5 +367,6 @@ app.post("/api/posts/:id/comment", (req, res) => {
 app.listen(5000, () => {
     console.log("Server running on http://localhost:5000 🚀");
 });
+
 
 
