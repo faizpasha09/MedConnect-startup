@@ -12,6 +12,11 @@ const rateLimit = require("express-rate-limit");
 const validator = require("validator");
 
 const app = express();
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 min
+  max: 20, // sirf 20 attempts
+  message: "Too many login attempts. Try again later.",
+});
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -20,12 +25,6 @@ app.use("/api/login", loginLimiter);
 
 //app.use(cors());
 //app.use("/uploads", express.static("uploads"));
-
-const loginLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 min
-  max: 20, // sirf 20 attempts
-  message: "Too many login attempts. Try again later.",
-});
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, "uploads/"),
@@ -403,6 +402,7 @@ app.post("/api/posts/:id/comment", (req, res) => {
 app.listen(5000, () => {
     console.log("Server running on http://localhost:5000 🚀");
 });
+
 
 
 
