@@ -1,7 +1,7 @@
-document.addEventListener("DOMContentLoaded", () => {
+ const API = window.location.origin + "/api";
+ const token = localStorage.getItem("token");
 
-    const API = window.location.origin + "/api";
-    const token = localStorage.getItem("token");
+document.addEventListener("DOMContentLoaded", () => {
 
     if (!token) location.href = "index.html";
 
@@ -64,6 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
 });
+
 
 
 
