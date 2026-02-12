@@ -10,6 +10,27 @@ body {
     background-color: #0d6efd;
 }
 
+/*password-wrapped*/
+
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper input {
+  padding-right: 40px; /* eye ke liye space */
+}
+
+.toggle-eye {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 18px;
+  color: #555;
+}
+
+
 /* ===== Auth Footer ===== */
 .auth-footer {
     font-size: 13px;
@@ -25,4 +46,5 @@ body {
 
 .footer-link:hover {
     text-decoration: underline;
+
 }
