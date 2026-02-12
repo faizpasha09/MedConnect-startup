@@ -7,15 +7,25 @@ const db = require("./db");
 const sendVerificationEmail = require("./email");
 const multer = require("multer");
 const path = require("path");
-
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
+const validator = require("validator");
 
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(helmet());
+app.use("/api/login", loginLimiter);
 
 //app.use(cors());
 //app.use("/uploads", express.static("uploads"));
+
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 min
+  max: 20, // sirf 20 attempts
+  message: "Too many login attempts. Try again later.",
+});
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, "uploads/"),
@@ -48,11 +58,20 @@ app.use(express.static(__dirname));
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "index.html"));
 });
-const SECRET_KEY = "medconnect_secret";
+const SECRET_KEY = process.env.JWT_SECRET;
 
 // ================= SIGNUP =================
 app.post("/api/signup", async (req, res) => {
     const { name, email, specialization, password } = req.body;
+
+     // ✅ EMAIL VALIDATION (yahin add karo)
+    if (!validator.isEmail(email)) {
+        return res.status(400).json({ message: "Invalid email format" });
+    }
+
+    if (password.length < 6) {
+        return res.status(400).json({ message: "Password must be at least 6 characters" });
+    }
 
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -77,7 +96,12 @@ app.post("/api/signup", async (req, res) => {
 app.post("/api/login", (req, res) => {
   const { email, password } = req.body;
 
-  if (!email || !password) {
+    // ✅ EMAIL VALIDATION
+    if (!validator.isEmail(email)) {
+        return res.status(400).json({ message: "Invalid email format" });
+    }
+
+   if (!email || !password) {
     return res.status(400).json({ message: "Email and password required" });
   }
 
@@ -102,7 +126,7 @@ app.post("/api/login", (req, res) => {
         return res.status(400).json({ message: "Invalid email or password" });
       }
 
-      const token = jwt.sign({ id: doctor.id }, SECRET_KEY, { expiresIn: "7d" });
+      const token = jwt.sign({ id: doctor.id }, SECRET_KEY, { expiresIn: "1d" });
 
       res.json({
         message: "Login successful ✅",
@@ -379,6 +403,7 @@ app.post("/api/posts/:id/comment", (req, res) => {
 app.listen(5000, () => {
     console.log("Server running on http://localhost:5000 🚀");
 });
+
 
 
 
