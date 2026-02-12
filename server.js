@@ -69,44 +69,50 @@ app.post("/api/signup", async (req, res) => {
 
 // ================= LOGIN =================
 app.post("/api/login", (req, res) => {
-    const { email, password } = req.body;
+  const { email, password } = req.body;
 
-    const sql = "SELECT * FROM doctors WHERE email = ?";
+  if (!email || !password) {
+    return res.status(400).json({ message: "Email and password required" });
+  }
 
-    db.query(sql, [email], async (err, results) => {
+  const sql = "SELECT * FROM doctors WHERE email = ?";
 
-        if (err || results.length === 0) {
-            return res.status(400).json({ message: "Invalid email or password" });
-        }
+  db.query(sql, [email], async (err, results) => {
+    if (err) {
+      console.log("DB LOGIN ERROR:", err);
+      return res.status(500).json({ message: "Database error" });
+    }
 
-        const doctor = results[0];
+    if (!results || results.length === 0) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
 
-        const isMatch = await bcrypt.compare(password, doctor.password);
+    try {
+      const doctor = results[0];
 
-        if (!isMatch) {
-            return res.status(400).json({ message: "Invalid email or password" });
-        }
+      const isMatch = await bcrypt.compare(password, doctor.password);
 
-        // 🔐 Check doctor verification status
-        /* if (doctor.status !== "verified") {
-             return res.status(403).json({
-                 message: "Your account is under verification. Please wait for approval.",
-             });
-         } */
+      if (!isMatch) {
+        return res.status(400).json({ message: "Invalid email or password" });
+      }
 
-        const token = jwt.sign({ id: doctor.id }, SECRET_KEY, { expiresIn: "7d" });
+      const token = jwt.sign({ id: doctor.id }, SECRET_KEY, { expiresIn: "7d" });
 
-        res.json({
-            message: "Login successful ✅",
-            token,
-            doctor: {
-                id: doctor.id,
-                name: doctor.name,
-                email: doctor.email,
-                specialization: doctor.specialization,
-            },
-        });
-    });
+      res.json({
+        message: "Login successful ✅",
+        token,
+        doctor: {
+          id: doctor.id,
+          name: doctor.name,
+          email: doctor.email,
+          specialization: doctor.specialization,
+        },
+      });
+    } catch (error) {
+      console.log("LOGIN CRASH:", error);
+      res.status(500).json({ message: "Server error during login" });
+    }
+  });
 });
 
 // ===== VERIFY DOCTOR (ADMIN USE) =====
@@ -367,6 +373,7 @@ app.post("/api/posts/:id/comment", (req, res) => {
 app.listen(5000, () => {
     console.log("Server running on http://localhost:5000 🚀");
 });
+
 
 
 
